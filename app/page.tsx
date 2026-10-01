@@ -36,20 +36,19 @@ export default function Home() {
     setSelectedDate(today);
   }, []);
 
-  // Hydration handling and loading bookings
+  // Hydration handling and loading bookings from the SQLite-backed API
   useEffect(() => {
     setMounted(true);
-    const local = localStorage.getItem("booking_hall_reservations");
-    if (local) {
-      try {
-        setBookings(JSON.parse(local));
-      } catch (e) {
-        setBookings(initialBookings);
-      }
-    } else {
-      setBookings(initialBookings);
-      localStorage.setItem("booking_hall_reservations", JSON.stringify(initialBookings));
-    }
+    fetch("/api/bookings")
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          setBookings(json.data);
+        } else {
+          setBookings(initialBookings);
+        }
+      })
+      .catch(() => setBookings(initialBookings));
   }, []);
 
   // Filter halls based on searches & inputs
@@ -86,7 +85,7 @@ export default function Home() {
     }, 150);
   };
 
-  const handlePaymentSuccess = (buyerName: string, buyerEmail: string) => {
+  const handlePaymentSuccess = async (buyerName: string, buyerEmail: string) => {
     if (!selectedHall) return;
 
     const subtotal = selectedSlots.length * selectedHall.pricePerHour;
@@ -94,8 +93,7 @@ export default function Home() {
     const serviceFee = 15;
     const finalPaid = subtotal + tax + serviceFee;
 
-    const newBooking: Booking = {
-      id: `BK-${Math.floor(100000 + Math.random() * 900000)}`,
+    const payload = {
       hallId: selectedHall.id,
       hallName: selectedHall.name,
       date: selectedDate,
@@ -104,29 +102,45 @@ export default function Home() {
       paymentStatus: "success",
       name: buyerName,
       email: buyerEmail,
-      createdAt: new Date().toISOString(),
     };
 
-    const updatedBookings = [newBooking, ...bookings];
-    setBookings(updatedBookings);
-    localStorage.setItem("booking_hall_reservations", JSON.stringify(updatedBookings));
+    try {
+      const res = await fetch("/api/bookings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      const json = await res.json();
+      if (!json.success) throw new Error(json.error || "Failed to create booking");
+
+      const newBooking: Booking = json.data;
+      setBookings([newBooking, ...bookings]);
+
+      // Open receipt modal
+      setActiveReceiptBooking(newBooking);
+      setActiveReceiptHall(selectedHall);
+    } catch (error) {
+      console.error("Booking creation failed:", error);
+      alert("Sorry, your booking could not be saved. Please try again.");
+    }
 
     // Clear calendar choices
     setSelectedSlots([]);
 
-    // Open receipt modal
-    setActiveReceiptBooking(newBooking);
-    setActiveReceiptHall(selectedHall);
-    
     // Close checkout sheet
     setActivePaymentHall(null);
   };
 
-  const handleCancelBooking = (bookingId: string) => {
+  const handleCancelBooking = async (bookingId: string) => {
     if (confirm("Are you sure you want to cancel this booking? This will immediately free up the reserved time slots.")) {
-      const updated = bookings.filter((b) => b.id !== bookingId);
-      setBookings(updated);
-      localStorage.setItem("booking_hall_reservations", JSON.stringify(updated));
+      try {
+        await fetch(`/api/bookings?id=${encodeURIComponent(bookingId)}`, { method: "DELETE" });
+        const updated = bookings.filter((b) => b.id !== bookingId);
+        setBookings(updated);
+      } catch (error) {
+        console.error("Booking cancellation failed:", error);
+        alert("Sorry, the booking could not be cancelled. Please try again.");
+      }
     }
   };
 

@@ -5,6 +5,7 @@ export interface Hall {
   capacity: number;
   pricePerHour: number;
   image: string;
+  pic: string;
   rating: number;
   reviewsCount: number;
   amenities: string[];

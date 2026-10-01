@@ -3,8 +3,9 @@ import { Hall, Booking } from "./types";
 export const halls: Hall[] = [
   {
     id: "grand-ballroom",
-    name: "The Grand Ballroom",
-    description: "Experience royal luxury in our main event room. Features majestic gold trim, crystal chandeliers, a grand stage, and a vast marble dance floor. Perfect for lavish weddings, galas, and high-profile ceremonies.",
+    name: "Universiti Satelit BIM (Perak)",
+    description: "No 74, Jalan Lang Indah A/1,Pusat Perniagaan Lang Indah,30010 Ipoh,Perak",
+    pic: "Norhasliza Binti Ahmad",
     capacity: 500,
     pricePerHour: 250,
     image: "/images/grand_ballroom.png",
@@ -27,8 +28,9 @@ export const halls: Hall[] = [
   },
   {
     id: "metropolitan-hall",
-    name: "Metropolitan Conference Hall",
-    description: "A premium corporate venue built for high-impact events. Features modern minimalist wood design, ergonomic seating, a massive high-tech projector screen, and floor-to-ceiling glass windows offering gorgeous urban views.",
+    name: "Universiti Satelit BIM (Kedah)",
+    description: "No. 90, Kulim Avenue,Persiaran 1,Kulim Hi-Tech Park,09000 Kulim,Kedah",
+    pic: "Mohd Shahryl Bin Azizan",
     capacity: 150,
     pricePerHour: 120,
     image: "/images/metropolitan_hall.png",
@@ -51,8 +53,9 @@ export const halls: Hall[] = [
   },
   {
     id: "glasshouse-garden",
-    name: "The Glasshouse Garden",
-    description: "A breathtaking botanical greenhouse venue surrounded by lush flora and soft hanging florals. A pristine glass roof lets in natural sunlight by day and starry views by night, creating an enchanting natural setting.",
+    name: "UNIVERSITY SATELIT BIM(Melaka)",
+    description: "No. 29 9B-15. Tingkat Bawah, Jalan TU 49A.Kompleks Komersial Boulevard Taman Tasik Utama.75450 Aver Keroh Melаka.",
+    pic: "Khairulazli bin Sharifuddin",
     capacity: 200,
     pricePerHour: 180,
     image: "/images/glasshouse_garden.png",
@@ -77,6 +80,7 @@ export const halls: Hall[] = [
     id: "acoustic-lounge",
     name: "The Acoustic Lounge",
     description: "A cozy, vintage-styled hall clad in solid dark timber. Designed with top-tier acoustic resonance, cozy leather Chesterfield sofas, glowing retro lamps, and an elegant Steinway grand piano on a velvet-curtained stage.",
+    pic: "Khairulazli bin Sharifuddin",
     capacity: 80,
     pricePerHour: 90,
     image: "/images/acoustic_lounge.png",

@@ -66,6 +66,8 @@ export default function HallCard({ hall, onSelect, isSelected }: HallCardProps) 
       <div className="flex flex-1 flex-col p-6">
         <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3 leading-relaxed mb-6">
           {hall.description}
+        </p>  <p className="text-sm text-zinc-600 dark:text-zinc-400 line-clamp-3 leading-relaxed mb-6">
+          {hall.pic}
         </p>
 
         {/* Features Checklist */}
